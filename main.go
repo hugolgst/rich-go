@@ -1,0 +1,1 @@
+package rich_go
