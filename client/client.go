@@ -1,7 +1,7 @@
 package client
 
 import (
-	"../ipc"
+	"github.com/ananagame/rich-go/ipc"
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
