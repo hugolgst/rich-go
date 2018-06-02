@@ -1,11 +1,11 @@
-package rich_go
+package ipc
 
 import (
-	"os"
-	"net"
-	"fmt"
-	"encoding/binary"
 	"bytes"
+	"encoding/binary"
+	"fmt"
+	"net"
+	"os"
 )
 
 var socket net.Conn
@@ -27,7 +27,7 @@ func GetIpcPath() string {
 
 // Open the discord-ipc-0 unix socket
 func OpenSocket() {
-	sock, err := net.Dial("unix", GetIpcPath() + "discord-ipc-0")
+	sock, err := net.Dial("unix", GetIpcPath()+"discord-ipc-0")
 	if err != nil {
 		panic(err)
 	}
