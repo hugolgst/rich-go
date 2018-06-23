@@ -10,7 +10,7 @@ import (
 
 var socket net.Conn
 
-// Return the current IPC socket's path
+// Choose the right directory to the ipc socket and return it
 func GetIpcPath() string {
 	variablesnames := []string{"XDG_RUNTIME_DIR", "TMPDIR", "TMP", "TEMP"}
 
@@ -27,7 +27,7 @@ func GetIpcPath() string {
 
 // Open the discord-ipc-0 unix socket
 func OpenSocket() {
-	sock, err := net.Dial("unix", GetIpcPath()+"discord-ipc-0")
+	sock, err := net.Dial("unix", GetIpcPath()+"/discord-ipc-0")
 	if err != nil {
 		panic(err)
 	}
@@ -68,7 +68,6 @@ func Send(opcode int, payload string) string {
 	}
 
 	buf.Write([]byte(payload))
-
 	socket.Write(buf.Bytes())
 
 	return Read()
