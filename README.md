@@ -1,6 +1,10 @@
+This is forked from the original working version at [github.com/ananagame/rich-go](github.com/ananagame/rich-go).
+The only difference is the removal of `fmt.Println` output
+
+
 # rich-go
 
-A simple Golang extension for Discord Rich Presence 
+A simple Golang extension for Discord Rich Presence
 
 ## Installation
 

@@ -32,9 +32,17 @@ func OpenSocket() {
 		panic(err)
 	}
 
-	fmt.Println("Listening to discord-ipc-0")
+	//fmt.Println("Listening to discord-ipc-0")
 
 	socket = sock
+}
+
+func CloseSocket() error {
+	if socket != nil {
+		socket.Close()
+		socket = nil
+	}
+	return nil
 }
 
 // Read the socket response
