@@ -47,7 +47,11 @@ func Login(clientid string) {
 			panic(err)
 		}
 
-		ipc.OpenSocket()
+		err = ipc.OpenSocket()
+		if err != nil {
+			return
+		}
+
 		ipc.Send(0, string(payload))
 		// fmt.Println(ipc.Send(0, string(payload)))
 	}
@@ -60,6 +64,9 @@ func Logout() {
 }
 
 func SetActivity(activity Activity) {
+	if isLoggedIn == false {
+		return
+	}
 	payload, err := json.Marshal(Frame{
 		"SET_ACTIVITY",
 		Args{
