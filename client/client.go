@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/donovansolms/rich-go-redo/ipc"
+	"github.com/donovansolms/rich-go/ipc"
 )
 
 type Handshake struct {
@@ -52,8 +52,8 @@ func Login(clientid string) error {
 			return err
 		}
 
+		// TODO: Response should be parsed
 		ipc.Send(0, string(payload))
-		// fmt.Println(ipc.Send(0, string(payload)))
 	}
 	isLoggedIn = true
 
@@ -67,7 +67,6 @@ func Logout() {
 
 func SetActivity(activity Activity) error {
 	if isLoggedIn == false {
-		fmt.Println("Not logged in")
 		return nil
 	}
 	payload, err := json.Marshal(Frame{
@@ -82,10 +81,8 @@ func SetActivity(activity Activity) error {
 		return err
 	}
 
-	// fmt.Println(string(payload))
-
-	resp := ipc.Send(1, string(payload))
-	fmt.Println(resp)
+	// TODO: Response should be parsed
+	ipc.Send(1, string(payload))
 	return nil
 }
 

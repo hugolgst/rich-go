@@ -2,19 +2,16 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"time"
 
-	"github.com/donovansolms/rich-go-redo/client"
+	"github.com/donovansolms/rich-go/client"
 )
 
 func main() {
-	fmt.Println("Test presence")
 
-	err := client.Login("530821687864983554")
+	err := client.Login("YOUR_DISCORD_APP_ID")
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(0)
+		panic(err)
 	}
 
 	err = client.SetActivity(client.Activity{
@@ -29,9 +26,11 @@ func main() {
 	})
 
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(0)
+		panic(err)
 	}
 
-	time.Sleep(time.Second * 5)
+	// Discord will only show the presence if the app is running
+	// Sleep for a few seconds to see the update
+	fmt.Println("Sleeping...")
+	time.Sleep(time.Second * 10)
 }
