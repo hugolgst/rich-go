@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/donovansolms/rich-go/ipc"
+	"github.com/donovansolms/rich-go-redo/ipc"
 )
 
 type Handshake struct {
@@ -40,22 +40,24 @@ type Assets struct {
 
 var isLoggedIn bool
 
-func Login(clientid string) {
+func Login(clientid string) error {
 	if isLoggedIn == false {
 		payload, err := json.Marshal(Handshake{"1", clientid})
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		err = ipc.OpenSocket()
 		if err != nil {
-			return
+			return err
 		}
 
 		ipc.Send(0, string(payload))
 		// fmt.Println(ipc.Send(0, string(payload)))
 	}
 	isLoggedIn = true
+
+	return nil
 }
 
 func Logout() {
@@ -63,9 +65,10 @@ func Logout() {
 	ipc.CloseSocket()
 }
 
-func SetActivity(activity Activity) {
+func SetActivity(activity Activity) error {
 	if isLoggedIn == false {
-		return
+		fmt.Println("Not logged in")
+		return nil
 	}
 	payload, err := json.Marshal(Frame{
 		"SET_ACTIVITY",
@@ -76,12 +79,14 @@ func SetActivity(activity Activity) {
 		getNonce(),
 	})
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	// fmt.Println(string(payload))
 
-	ipc.Send(1, string(payload))
+	resp := ipc.Send(1, string(payload))
+	fmt.Println(resp)
+	return nil
 }
 
 func getNonce() string {
