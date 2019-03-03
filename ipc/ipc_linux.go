@@ -2,12 +2,13 @@ package ipc
 
 import (
 	"net"
+	"time"
 )
 
-// Open the discord-ipc-0 unix socket
+// OpenSocket opens the discord-ipc-0 unix socket
 func OpenSocket() error {
 
-	sock, err := net.Dial("unix", GetIpcPath()+"/discord-ipc-0")
+	sock, err := net.DialTimeout("unix", GetIpcPath()+"/discord-ipc-0", time.Second*2)
 	if err != nil {
 		return err
 	}
