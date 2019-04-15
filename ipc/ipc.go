@@ -25,16 +25,12 @@ func GetIpcPath() string {
 	return "/tmp"
 }
 
-// Open the discord-ipc-0 unix socket
-func OpenSocket() {
-	sock, err := net.Dial("unix", GetIpcPath()+"/discord-ipc-0")
-	if err != nil {
-		panic(err)
+func CloseSocket() error {
+	if socket != nil {
+		socket.Close()
+		socket = nil
 	}
-
-	fmt.Println("Listening to discord-ipc-0")
-
-	socket = sock
+	return nil
 }
 
 // Read the socket response
@@ -42,7 +38,7 @@ func Read() string {
 	buf := make([]byte, 512)
 	payloadlength, err := socket.Read(buf)
 	if err != nil {
-		fmt.Println("Nothing to read")
+		//fmt.Println("Nothing to read")
 	}
 
 	buffer := new(bytes.Buffer)

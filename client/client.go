@@ -1,11 +1,12 @@
 package client
 
 import (
-	"github.com/ananagame/rich-go/ipc"
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"os"
+
+	"github.com/donovansolms/rich-go/ipc"
 )
 
 type Handshake struct {
@@ -27,27 +28,47 @@ type Args struct {
 type Activity struct {
 	Details string `json:"details"`
 	State   string `json:"state"`
-	Assets Assets `json:"assets"`
+	Assets  Assets `json:"assets"`
 }
 
 type Assets struct {
-	LargeImage string`json:"large_image"`
-	LargeText string `json:"large_text"`
+	LargeImage string `json:"large_image"`
+	LargeText  string `json:"large_text"`
 	SmallImage string `json:"small_image"`
-	SmallText string `json:"small_text"`
+	SmallText  string `json:"small_text"`
 }
 
-func Login(clientid string) {
-	payload, err := json.Marshal(Handshake{"1", clientid})
-	if err != nil {
-		panic(err)
+var isLoggedIn bool
+
+func Login(clientid string) error {
+	if isLoggedIn == false {
+		payload, err := json.Marshal(Handshake{"1", clientid})
+		if err != nil {
+			return err
+		}
+
+		err = ipc.OpenSocket()
+		if err != nil {
+			return err
+		}
+
+		// TODO: Response should be parsed
+		ipc.Send(0, string(payload))
 	}
+	isLoggedIn = true
 
-	ipc.OpenSocket()
-	fmt.Println(ipc.Send(0, string(payload)))
+	return nil
 }
 
-func SetActivity(activity Activity) {
+func Logout() {
+	isLoggedIn = false
+	ipc.CloseSocket()
+}
+
+func SetActivity(activity Activity) error {
+	if isLoggedIn == false {
+		return nil
+	}
 	payload, err := json.Marshal(Frame{
 		"SET_ACTIVITY",
 		Args{
@@ -57,14 +78,13 @@ func SetActivity(activity Activity) {
 		getNonce(),
 	})
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	fmt.Println(string(payload))
-
-	fmt.Println(ipc.Send(1, string(payload)))
+	// TODO: Response should be parsed
+	ipc.Send(1, string(payload))
+	return nil
 }
-
 
 func getNonce() string {
 	buf := make([]byte, 16)

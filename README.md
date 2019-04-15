@@ -1,13 +1,23 @@
+### About this fork
+
+This is forked from the original working version at [github.com/ananagame/rich-go](github.com/ananagame/rich-go).
+
+Additions:
+
+1. Removed panic() statements, returns errors instead so this can be used as a library
+2. Added Windows support. Windows uses named pipes (using gopkg.in/natefinch/npipe.v2)
+3. Added new example since Assets are required now
+
 # rich-go
 
-A simple Golang extension for Discord Rich Presence 
+A simple Golang extension for Discord Rich Presence
 
 ## Installation
 
-Install `github.com/ananagame/rich-go`:
+Install `github.com/donovansolms/rich-go`:
 
 ```
-$ go get github.com/ananagame/rich-go
+$ go get github.com/donovansolms/rich-go
 ```
 
 ## Usage
