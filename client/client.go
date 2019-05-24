@@ -31,6 +31,7 @@ type Activity struct {
 	Assets     Assets     `json:"assets,omitempty"`
 	Party      Party      `json:"party,omitempty"`
 	Timestamps Timestamps `json:"timestamps,omitempty"`
+	Secrets    Secrets    `json:"secrets,omitempty"`
 }
 
 type Assets struct {
@@ -48,6 +49,12 @@ type Party struct {
 type Timestamps struct {
 	Start int64 `json:"start,omitempty"`
 	End   int64 `json:"end,omitempty"`
+}
+
+type Secrets struct {
+	Match    string `json:"match,omitempty"`
+	Join     string `json:"join,omitempty"`
+	Spectate string `json:"spectate,omitempty"`
 }
 
 var isLoggedIn bool
