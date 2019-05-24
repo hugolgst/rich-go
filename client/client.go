@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/donovansolms/rich-go/ipc"
+	"github.com/heroslender/rich-go/ipc"
 )
 
 type Handshake struct {
@@ -26,9 +26,11 @@ type Args struct {
 }
 
 type Activity struct {
-	Details string `json:"details"`
-	State   string `json:"state"`
-	Assets  Assets `json:"assets"`
+	Details    string     `json:"details"`
+	State      string     `json:"state"`
+	Assets     Assets     `json:"assets,omitempty"`
+	Party      Party      `json:"party,omitempty"`
+	Timestamps Timestamps `json:"timestamps,omitempty"`
 }
 
 type Assets struct {
@@ -36,6 +38,16 @@ type Assets struct {
 	LargeText  string `json:"large_text"`
 	SmallImage string `json:"small_image"`
 	SmallText  string `json:"small_text"`
+}
+
+type Party struct {
+	ID   string `json:"id"`
+	Size [2]int `json:"size"`
+}
+
+type Timestamps struct {
+	Start int64 `json:"start,omitempty"`
+	End   int64 `json:"end,omitempty"`
 }
 
 var isLoggedIn bool
@@ -69,6 +81,7 @@ func SetActivity(activity Activity) error {
 	if isLoggedIn == false {
 		return nil
 	}
+
 	payload, err := json.Marshal(Frame{
 		"SET_ACTIVITY",
 		Args{
