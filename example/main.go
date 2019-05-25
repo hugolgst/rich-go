@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/donovansolms/rich-go/client"
+	"github.com/heroslender/rich-go/client"
 )
 
 func main() {
@@ -15,13 +15,19 @@ func main() {
 	}
 
 	err = client.SetActivity(client.Activity{
-		State:   "hey",
-		Details: "i'm running on go",
-		Assets: client.Assets{
-			LargeImage: "Unknown",   // TODO: Add image
-			LargeText:  "None",      // TODO: Add image alt
-			SmallImage: "Unkown",    // TODO: Add image
-			SmallText:  "NoneSmall", // TODO: Add image alt
+		State:      "hey",
+		Details:    "i'm running on go",
+		LargeImage: "Unknown",   // TODO: Add image
+		LargeText:  "None",      // TODO: Add image alt
+		SmallImage: "Unknown",   // TODO: Add image
+		SmallText:  "NoneSmall", // TODO: Add image alt
+		Party: &client.Party{
+			ID:         "-1",
+			Players:    15,
+			MaxPlayers: 24,
+		},
+		Timestamps: &client.Timestamps{
+			Start: time.Now().UnixNano() / 1e6,
 		},
 	})
 
