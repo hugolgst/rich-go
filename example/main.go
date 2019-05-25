@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/heroslender/rich-go/client"
+	"github.com/donovansolms/rich-go/client"
 )
 
 func main() {
