@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/donovansolms/rich-go/ipc"
+	"github.com/ananagame/rich-go/ipc"
 )
 
 var isLoggedIn bool

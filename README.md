@@ -37,3 +37,4 @@ client.SetActivity(client.Activity{
 
 - [AnanaGame](https://github.com/ananagame) - creator, maintainer
 - [donovansolms](https://github.com/donovansolms) - contributor
+- [heroslender](https://github.com/heroslender) - contributor

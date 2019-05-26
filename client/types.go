@@ -12,7 +12,7 @@ type Frame struct {
 }
 
 type Args struct {
-	Pid      int             `json:"pid"`
+	Pid      int              `json:"pid"`
 	Activity *PayloadActivity `json:"activity"`
 }
 
