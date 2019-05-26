@@ -9,35 +9,6 @@ import (
 	"github.com/donovansolms/rich-go/ipc"
 )
 
-type Handshake struct {
-	V        string `json:"v"`
-	ClientId string `json:"client_id"`
-}
-
-type Frame struct {
-	Cmd   string `json:"cmd"`
-	Args  Args   `json:"args"`
-	Nonce string `json:"nonce"`
-}
-
-type Args struct {
-	Pid      int      `json:"pid"`
-	Activity Activity `json:"activity"`
-}
-
-type Activity struct {
-	Details string `json:"details"`
-	State   string `json:"state"`
-	Assets  Assets `json:"assets"`
-}
-
-type Assets struct {
-	LargeImage string `json:"large_image"`
-	LargeText  string `json:"large_text"`
-	SmallImage string `json:"small_image"`
-	SmallText  string `json:"small_text"`
-}
-
 var isLoggedIn bool
 
 func Login(clientid string) error {
@@ -69,11 +40,12 @@ func SetActivity(activity Activity) error {
 	if isLoggedIn == false {
 		return nil
 	}
+
 	payload, err := json.Marshal(Frame{
 		"SET_ACTIVITY",
 		Args{
 			os.Getpid(),
-			activity,
+			mapActivity(&activity),
 		},
 		getNonce(),
 	})
