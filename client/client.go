@@ -9,10 +9,11 @@ import (
 	"github.com/ananagame/rich-go/ipc"
 )
 
-var isLoggedIn bool
+var logged bool
 
+// Login sends a handshake in the socket and returns an error or nil
 func Login(clientid string) error {
-	if isLoggedIn == false {
+	if !logged {
 		payload, err := json.Marshal(Handshake{"1", clientid})
 		if err != nil {
 			return err
@@ -26,18 +27,22 @@ func Login(clientid string) error {
 		// TODO: Response should be parsed
 		ipc.Send(0, string(payload))
 	}
-	isLoggedIn = true
+	logged = true
 
 	return nil
 }
 
 func Logout() {
-	isLoggedIn = false
-	ipc.CloseSocket()
+	logged = false
+
+	err := ipc.CloseSocket()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func SetActivity(activity Activity) error {
-	if isLoggedIn == false {
+	if !logged {
 		return nil
 	}
 
@@ -49,6 +54,7 @@ func SetActivity(activity Activity) error {
 		},
 		getNonce(),
 	})
+
 	if err != nil {
 		return err
 	}

@@ -51,6 +51,7 @@ type Secrets struct {
 }
 
 func mapActivity(activity *Activity) *PayloadActivity {
+	// Replace empty fields by "none"
 	if activity.LargeImage == "" {
 		activity.LargeImage = "none"
 	}

@@ -2,25 +2,23 @@ package main
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/ananagame/rich-go/client"
+	"time"
 )
 
 func main() {
-
-	err := client.Login("YOUR_DISCORD_APP_ID")
+	err := client.Login("DISCORD_APP_ID")
 	if err != nil {
 		panic(err)
 	}
 
 	err = client.SetActivity(client.Activity{
-		State:      "hey",
-		Details:    "i'm running on go",
-		LargeImage: "Unknown",   // TODO: Add image
-		LargeText:  "None",      // TODO: Add image alt
-		SmallImage: "Unknown",   // TODO: Add image
-		SmallText:  "NoneSmall", // TODO: Add image alt
+		State:      "Heyy!!!",
+		Details:    "I'm running on rich-go :)",
+		LargeImage: "largeimageid",
+		LargeText:  "This is the large image :D",
+		SmallImage: "smallimageid",
+		SmallText:  "And this is the small image",
 		Party: &client.Party{
 			ID:         "-1",
 			Players:    15,
