@@ -1,6 +1,6 @@
-# rich-go
+# rich-go [![Build Status](https://travis-ci.org/ananagame/rich-go.svg?branch=master)](https://travis-ci.org/ananagame/rich-go)
 
-A simple Golang extension for Discord Rich Presence
+An implementation of Discord's rich presence in Golang for Linux, macOS and Windows
 
 ## Installation
 
