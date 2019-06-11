@@ -4,10 +4,10 @@ A simple Golang extension for Discord Rich Presence
 
 ## Installation
 
-Install `github.com/donovansolms/rich-go`:
+Install `github.com/ananagame/rich-go`:
 
 ```
-$ go get github.com/donovansolms/rich-go
+$ go get github.com/ananagame/rich-go
 ```
 
 ## Usage
