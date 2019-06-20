@@ -1,5 +1,9 @@
 package client
 
+import (
+	"time"
+)
+
 // Activity holds the data for discord rich presence
 type Activity struct {
 	// What the player is currently doing
@@ -35,9 +39,9 @@ type Party struct {
 // Timestamps holds unix timestamps for start and/or end of the game
 type Timestamps struct {
 	// unix time (in milliseconds) of when the activity started
-	Start int64
+	Start time.Time
 	// unix time (in milliseconds) of when the activity ends
-	End int64
+	End time.Time
 }
 
 // Secrets holds secrets for Rich Presence joining and spectating
@@ -78,8 +82,8 @@ func mapActivity(activity *Activity) *PayloadActivity {
 
 	if activity.Timestamps != nil {
 		final.Timestamps = &PayloadTimestamps{
-			Start: uint64(activity.Timestamps.Start),
-			End:   uint64(activity.Timestamps.End),
+			Start: uint64(activity.Timestamps.Start.UnixNano() / 1e6),
+			End:   uint64(activity.Timestamps.End.UnixNano() / 1e6),
 		}
 	}
 

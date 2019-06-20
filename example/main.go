@@ -25,7 +25,7 @@ func main() {
 			MaxPlayers: 24,
 		},
 		Timestamps: &client.Timestamps{
-			Start: time.Now().UnixNano() / 1e6,
+			Start: time.Now(),
 		},
 	})
 
