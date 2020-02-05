@@ -64,7 +64,10 @@ func Send(opcode int, payload string) string {
 	}
 
 	buf.Write([]byte(payload))
-	socket.Write(buf.Bytes())
+	_, err = socket.Write(buf.Bytes())
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	return Read()
 }
