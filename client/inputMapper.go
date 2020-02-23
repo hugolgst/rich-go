@@ -39,9 +39,9 @@ type Party struct {
 // Timestamps holds unix timestamps for start and/or end of the game
 type Timestamps struct {
 	// unix time (in milliseconds) of when the activity started
-	Start time.Time
+	Start *time.Time
 	// unix time (in milliseconds) of when the activity ends
-	End time.Time
+	End *time.Time
 }
 
 // Secrets holds secrets for Rich Presence joining and spectating
@@ -80,10 +80,14 @@ func mapActivity(activity *Activity) *PayloadActivity {
 		},
 	}
 
-	if activity.Timestamps != nil {
+	if activity.Timestamps != nil && activity.Timestamps.Start != nil {
+		start := uint64(activity.Timestamps.Start.UnixNano() / 1e6)
 		final.Timestamps = &PayloadTimestamps{
-			Start: uint64(activity.Timestamps.Start.UnixNano() / 1e6),
-			End:   uint64(activity.Timestamps.End.UnixNano() / 1e6),
+			Start: &start,
+		}
+		if activity.Timestamps.End != nil {
+			end := uint64(activity.Timestamps.End.UnixNano() / 1e6)
+			final.Timestamps.End = &end
 		}
 	}
 

@@ -46,7 +46,7 @@ func Read() string {
 		buffer.WriteByte(buf[i])
 	}
 
-	return string(buffer.Bytes())
+	return buffer.String()
 }
 
 // Send opcode and payload to the unix socket
@@ -64,7 +64,10 @@ func Send(opcode int, payload string) string {
 	}
 
 	buf.Write([]byte(payload))
-	socket.Write(buf.Bytes())
+	_, err = socket.Write(buf.Bytes())
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	return Read()
 }

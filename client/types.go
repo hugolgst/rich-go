@@ -38,8 +38,8 @@ type PayloadParty struct {
 }
 
 type PayloadTimestamps struct {
-	Start uint64 `json:"start,omitempty"`
-	End   uint64 `json:"end,omitempty"`
+	Start *uint64 `json:"start,omitempty"`
+	End   *uint64 `json:"end,omitempty"`
 }
 
 type PayloadSecrets struct {
