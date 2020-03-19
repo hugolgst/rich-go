@@ -1,4 +1,4 @@
-# rich-go [![Build Status](https://travis-ci.org/ananagame/rich-go.svg?branch=master)](https://travis-ci.org/ananagame/rich-go)
+# rich-go [![Build Status](https://travis-ci.org/hugolgst/rich-go.svg?branch=master)](https://travis-ci.org/hugolgst/rich-go)
 
 An implementation of Discord's rich presence in Golang for Linux, macOS and Windows
 
