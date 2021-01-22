@@ -60,6 +60,7 @@ func SetActivity(activity Activity) error {
 	}
 
 	// TODO: Response should be parsed
+	print(string(payload))
 	ipc.Send(1, string(payload))
 	return nil
 }

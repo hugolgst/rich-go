@@ -23,6 +23,7 @@ type PayloadActivity struct {
 	Party      *PayloadParty      `json:"party,omitempty"`
 	Timestamps *PayloadTimestamps `json:"timestamps,omitempty"`
 	Secrets    *PayloadSecrets    `json:"secrets,omitempty"`
+	Buttons    []*PayloadButton   `json:"buttons,omitempty"`
 }
 
 type PayloadAssets struct {
@@ -46,4 +47,9 @@ type PayloadSecrets struct {
 	Match    string `json:"match,omitempty"`
 	Join     string `json:"join,omitempty"`
 	Spectate string `json:"spectate,omitempty"`
+}
+
+type PayloadButton struct {
+	Label string `json:"label,omitempty"`
+	Url   string `json:"url,omitempty"`
 }
