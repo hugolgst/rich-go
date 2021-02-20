@@ -24,6 +24,16 @@ type Activity struct {
 	Timestamps *Timestamps
 	// Secrets for Rich Presence joining and spectating
 	Secrets *Secrets
+	// Clickable buttons that open a URL in the browser
+	Buttons []*Button
+}
+
+// Button holds a label and the corresponding URL that is opened on press
+type Button struct {
+	// The label of the button
+	Label string
+	// The URL of the button
+	Url string
 }
 
 // Party holds information for the current party of the player
@@ -103,6 +113,15 @@ func mapActivity(activity *Activity) *PayloadActivity {
 			Join:     activity.Secrets.Join,
 			Match:    activity.Secrets.Match,
 			Spectate: activity.Secrets.Spectate,
+		}
+	}
+
+	if len(activity.Buttons) > 0 {
+		for _, btn := range activity.Buttons {
+			final.Buttons = append(final.Buttons, &PayloadButton{
+				Label: btn.Label,
+				Url:   btn.Url,
+			})
 		}
 	}
 
