@@ -9,40 +9,55 @@ import (
 	"github.com/hugolgst/rich-go/ipc"
 )
 
-var logged bool
+type Client struct {
+	ipc *ipc.IPC
+	logged bool
+}
+
+func NewClient(clientID string) (*Client, error) {
+	c := Client{}
+
+	i, err := ipc.NewIPC()
+	if err != nil {
+		return nil, err
+	}
+
+	c.ipc = i
+
+	if err := c.login(clientID); err != nil {
+		return nil, err
+	}
+
+	return &c, nil
+}
 
 // Login sends a handshake in the socket and returns an error or nil
-func Login(clientid string) error {
-	if !logged {
+func (c *Client) login(clientid string) error {
+	if !c.logged {
 		payload, err := json.Marshal(Handshake{"1", clientid})
 		if err != nil {
 			return err
 		}
 
-		err = ipc.OpenSocket()
-		if err != nil {
-			return err
-		}
-
 		// TODO: Response should be parsed
-		ipc.Send(0, string(payload))
+		c.ipc.Send(0, string(payload))
 	}
-	logged = true
+	c.logged = true
 
 	return nil
 }
 
-func Logout() {
-	logged = false
+func (c *Client) Logout() {
+	c.logged = false
 
-	err := ipc.CloseSocket()
+	err := c.ipc.CloseSocket()
 	if err != nil {
 		panic(err)
 	}
 }
 
-func SetActivity(activity Activity) error {
-	if !logged {
+func (c *Client) SetActivity(activity Activity) error {
+	if !c.logged {
 		return nil
 	}
 
@@ -52,7 +67,7 @@ func SetActivity(activity Activity) error {
 			os.Getpid(),
 			mapActivity(&activity),
 		},
-		getNonce(),
+		c.getNonce(),
 	})
 
 	if err != nil {
@@ -60,11 +75,11 @@ func SetActivity(activity Activity) error {
 	}
 
 	// TODO: Response should be parsed
-	ipc.Send(1, string(payload))
+	c.ipc.Send(1, string(payload))
 	return nil
 }
 
-func getNonce() string {
+func (c *Client) getNonce() string {
 	buf := make([]byte, 16)
 	_, err := rand.Read(buf)
 	if err != nil {
@@ -75,3 +90,4 @@ func getNonce() string {
 
 	return fmt.Sprintf("%x-%x-%x-%x-%x", buf[0:4], buf[4:6], buf[6:8], buf[8:10], buf[10:])
 }
+

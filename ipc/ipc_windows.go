@@ -3,12 +3,12 @@
 package ipc
 
 import (
-	npipe "gopkg.in/natefinch/npipe.v2"
+	npipe "github.com/natefinch/npipe"
 	"time"
 )
 
 // OpenSocket opens the discord-ipc-0 named pipe
-func OpenSocket() error {
+func (ipc *IPC) openSocket() error {
 	// Connect to the Windows named pipe, this is a well known name
 	// We use DialTimeout since it will block forever (or very very long) on Windows
 	// if the pipe is not available (Discord not running)
@@ -17,6 +17,6 @@ func OpenSocket() error {
 		return err
 	}
 
-	socket = sock
+	ipc.socket = sock
 	return nil
 }
