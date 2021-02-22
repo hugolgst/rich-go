@@ -10,11 +10,13 @@ import (
 	"github.com/hugolgst/rich-go/ipc"
 )
 
+// Client is a Discord client.
 type Client struct {
-	ipc *ipc.IPC
+	ipc    *ipc.IPC
 	logged bool
 }
 
+// NewClient returns Discord Client.
 func NewClient(clientID string) (*Client, error) {
 	c := Client{}
 
@@ -32,7 +34,7 @@ func NewClient(clientID string) (*Client, error) {
 	return &c, nil
 }
 
-// Login sends a handshake in the socket and returns an error or nil
+// Login sends a handshake in the socket and returns an error or nil.
 func (c *Client) Login(clientid string) error {
 	if !c.logged {
 		if err := c.handler(0, Handshake{"1", clientid}); err != nil {
@@ -44,15 +46,19 @@ func (c *Client) Login(clientid string) error {
 	return nil
 }
 
-func (c *Client) Logout() {
+// Logout close socket.
+func (c *Client) Logout() error {
 	c.logged = false
 
 	err := c.ipc.CloseSocket()
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
+// SetActivity send request to Discord for change user status.
 func (c *Client) SetActivity(activity Activity) error {
 	if !c.logged {
 		return errors.New("rich-go: client not login")
@@ -110,4 +116,3 @@ func (c *Client) handler(opcode int, payload interface{}) error {
 
 	return &response
 }
-

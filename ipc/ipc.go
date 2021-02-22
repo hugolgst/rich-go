@@ -7,10 +7,12 @@ import (
 	"os"
 )
 
+// IPC is a Inter Process Communications client
 type IPC struct {
 	socket net.Conn
 }
 
+// NewIPC returns a IPC client
 func NewIPC() (*IPC, error) {
 	ipc := IPC{}
 
@@ -36,6 +38,7 @@ func (ipc *IPC) getIpcPath() string {
 	return "/tmp"
 }
 
+// CloseSocket close IPC socket
 func (ipc *IPC) CloseSocket() error {
 	if ipc.socket != nil {
 		if err := ipc.socket.Close(); err != nil {
@@ -82,4 +85,3 @@ func (ipc *IPC) Send(opcode int, payload string) (string, error) {
 
 	return ipc.Read(), nil
 }
-

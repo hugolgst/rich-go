@@ -33,7 +33,7 @@ type Button struct {
 	// The label of the button
 	Label string
 	// The URL of the button
-	Url string
+	URL string
 }
 
 // Party holds information for the current party of the player
@@ -120,7 +120,7 @@ func mapActivity(activity *Activity) *PayloadActivity {
 		for _, btn := range activity.Buttons {
 			final.Buttons = append(final.Buttons, &PayloadButton{
 				Label: btn.Label,
-				Url:   btn.Url,
+				URL:   btn.URL,
 			})
 		}
 	}

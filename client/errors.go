@@ -2,6 +2,7 @@ package client
 
 import "fmt"
 
+// ErrorCode is a type of error.
 type ErrorCode int
 
 func (e ErrorCode) Error() string {
@@ -10,16 +11,19 @@ func (e ErrorCode) Error() string {
 
 // Discord error codes.
 const (
+	// No errors :)
 	NoErr ErrorCode = 0
 )
 
+// Error is a Discord error struct.
+// Sometimes (for example in handshake) discord can send error non in data struct
 type Error struct {
-	Code    ErrorCode    `json:"code"`
-	Message string `json:"message"`
+	Code    ErrorCode `json:"code"`
+	Message string    `json:"message"`
 
 	Data struct {
-		Code    ErrorCode    `json:"code"`
-		Message string `json:"message"`
+		Code    ErrorCode `json:"code"`
+		Message string    `json:"message"`
 	} `json:"data"`
 }
 
