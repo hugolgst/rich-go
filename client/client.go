@@ -3,6 +3,7 @@ package client
 import (
 	"crypto/rand"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 
@@ -24,7 +25,7 @@ func NewClient(clientID string) (*Client, error) {
 
 	c.ipc = i
 
-	if err := c.login(clientID); err != nil {
+	if err := c.Login(clientID); err != nil {
 		return nil, err
 	}
 
@@ -32,15 +33,11 @@ func NewClient(clientID string) (*Client, error) {
 }
 
 // Login sends a handshake in the socket and returns an error or nil
-func (c *Client) login(clientid string) error {
+func (c *Client) Login(clientid string) error {
 	if !c.logged {
-		payload, err := json.Marshal(Handshake{"1", clientid})
-		if err != nil {
+		if err := c.handler(0, Handshake{"1", clientid}); err != nil {
 			return err
 		}
-
-		// TODO: Response should be parsed
-		c.ipc.Send(0, string(payload))
 	}
 	c.logged = true
 
@@ -58,24 +55,22 @@ func (c *Client) Logout() {
 
 func (c *Client) SetActivity(activity Activity) error {
 	if !c.logged {
-		return nil
+		return errors.New("rich-go: client not login")
 	}
 
-	payload, err := json.Marshal(Frame{
+	payload := Frame{
 		"SET_ACTIVITY",
 		Args{
 			os.Getpid(),
 			mapActivity(&activity),
 		},
 		c.getNonce(),
-	})
+	}
 
-	if err != nil {
+	if err := c.handler(1, payload); err != nil {
 		return err
 	}
 
-	// TODO: Response should be parsed
-	c.ipc.Send(1, string(payload))
 	return nil
 }
 
@@ -89,5 +84,30 @@ func (c *Client) getNonce() string {
 	buf[6] = (buf[6] & 0x0f) | 0x40
 
 	return fmt.Sprintf("%x-%x-%x-%x-%x", buf[0:4], buf[4:6], buf[6:8], buf[8:10], buf[10:])
+}
+
+func (c *Client) handler(opcode int, payload interface{}) error {
+	jsonPayload, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	var response Error
+
+	resp, err := c.ipc.Send(opcode, string(jsonPayload))
+	if err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal([]byte(resp), &response); err != nil {
+		return err
+	}
+
+	switch response.getCode() {
+	case NoErr:
+		return nil
+	}
+
+	return &response
 }
 
