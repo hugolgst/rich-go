@@ -3,7 +3,7 @@
 package ipc
 
 import (
-	npipe "github.com/natefinch/npipe"
+	"github.com/natefinch/npipe"
 	"time"
 )
 
