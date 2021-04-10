@@ -105,7 +105,7 @@ func (c *Client) handler(opcode int, payload interface{}) error {
 		return err
 	}
 
-	if err := json.Unmarshal([]byte(resp), &response); err != nil {
+	if err := json.Unmarshal(resp, &response); err != nil {
 		return err
 	}
 

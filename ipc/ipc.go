@@ -51,36 +51,31 @@ func (ipc *IPC) CloseSocket() error {
 }
 
 // Read the socket response
-func (ipc *IPC) Read() string {
+func (ipc *IPC) Read() []byte {
 	buf := make([]byte, 512)
 	payloadlength, _ := ipc.socket.Read(buf)
 
-	buffer := new(bytes.Buffer)
-	for i := 8; i < payloadlength; i++ {
-		buffer.WriteByte(buf[i])
-	}
-
-	return buffer.String()
+	return buf[8:payloadlength]
 }
 
 // Send opcode and payload to the unix socket
-func (ipc *IPC) Send(opcode int, payload string) (string, error) {
+func (ipc *IPC) Send(opcode int, payload string) ([]byte, error) {
 	buf := new(bytes.Buffer)
 
 	err := binary.Write(buf, binary.LittleEndian, int32(opcode))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	err = binary.Write(buf, binary.LittleEndian, int32(len(payload)))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	buf.Write([]byte(payload))
 	_, err = ipc.socket.Write(buf.Bytes())
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	return ipc.Read(), nil
