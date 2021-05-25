@@ -65,20 +65,6 @@ type Secrets struct {
 }
 
 func mapActivity(activity *Activity) *PayloadActivity {
-	// Replace empty fields by "none"
-	if activity.LargeImage == "" {
-		activity.LargeImage = "none"
-	}
-	if activity.LargeText == "" {
-		activity.LargeText = "none"
-	}
-	if activity.SmallImage == "" {
-		activity.SmallImage = "none"
-	}
-	if activity.SmallText == "" {
-		activity.SmallText = "none"
-	}
-
 	final := &PayloadActivity{
 		Details: activity.Details,
 		State:   activity.State,

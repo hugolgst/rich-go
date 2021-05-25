@@ -17,9 +17,9 @@ type Args struct {
 }
 
 type PayloadActivity struct {
-	Details    string             `json:"details"`
-	State      string             `json:"state"`
-	Assets     PayloadAssets      `json:"assets"`
+	Details    string             `json:"details,omitempty"`
+	State      string             `json:"state,omitempty"`
+	Assets     PayloadAssets      `json:"assets,omitempty"`
 	Party      *PayloadParty      `json:"party,omitempty"`
 	Timestamps *PayloadTimestamps `json:"timestamps,omitempty"`
 	Secrets    *PayloadSecrets    `json:"secrets,omitempty"`
@@ -27,15 +27,15 @@ type PayloadActivity struct {
 }
 
 type PayloadAssets struct {
-	LargeImage string `json:"large_image"`
-	LargeText  string `json:"large_text"`
-	SmallImage string `json:"small_image"`
-	SmallText  string `json:"small_text"`
+	LargeImage string `json:"large_image,omitempty"`
+	LargeText  string `json:"large_text,omitempty"`
+	SmallImage string `json:"small_image,omitempty"`
+	SmallText  string `json:"small_text,omitempty"`
 }
 
 type PayloadParty struct {
-	ID   string `json:"id"`
-	Size [2]int `json:"size"`
+	ID   string `json:"id,omitempty"`
+	Size [2]int `json:"size,omitempty"`
 }
 
 type PayloadTimestamps struct {
