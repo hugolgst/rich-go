@@ -24,26 +24,33 @@ func Login(clientid string) error {
 			return err
 		}
 
+		err = ipc.Send(0, string(payload))
+		if err != nil {
+			return err
+		}
+
 		// TODO: Response should be parsed
-		ipc.Send(0, string(payload))
+		//fmt.Println(ipc.Read())
 	}
 	logged = true
 
 	return nil
 }
 
-func Logout() {
+func Logout() error {
 	logged = false
 
 	err := ipc.CloseSocket()
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
 func SetActivity(activity Activity) error {
 	if !logged {
-		return nil
+		return fmt.Errorf("not logged")
 	}
 
 	payload, err := json.Marshal(Frame{
@@ -59,8 +66,14 @@ func SetActivity(activity Activity) error {
 		return err
 	}
 
+	err = ipc.Send(1, string(payload))
+	if err != nil {
+		return err
+	}
+
 	// TODO: Response should be parsed
-	ipc.Send(1, string(payload))
+	//fmt.Println(ipc.Read())
+
 	return nil
 }
 
