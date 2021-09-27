@@ -42,6 +42,12 @@ err = client.SetActivity(client.Activity{
 	Timestamps: &client.Timestamps{
 		Start: time.Now(),
 	},
+	Buttons: []*client.Button{
+		&client.Button{
+			Label: "GitHub",
+			Url:   "https://github.com/hugolgst/rich-go",
+		},
+	},
 })
 
 if err != nil {
