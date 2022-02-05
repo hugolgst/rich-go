@@ -11,8 +11,9 @@ import (
 
 var logged bool
 
-// Login sends a handshake in the socket and returns an error or nil
+// Login sends a handshake in socket and returns an error or nil
 func Login(clientid string) error {
+	var gerr error
 	if !logged {
 		payload, err := json.Marshal(Handshake{"1", clientid})
 		if err != nil {
@@ -25,11 +26,11 @@ func Login(clientid string) error {
 		}
 
 		// TODO: Response should be parsed
-		ipc.Send(0, string(payload))
+		_, gerr = ipc.Send(0, string(payload))
 	}
 	logged = true
 
-	return nil
+	return gerr
 }
 
 func Logout() {
@@ -60,8 +61,8 @@ func SetActivity(activity Activity) error {
 	}
 
 	// TODO: Response should be parsed
-	ipc.Send(1, string(payload))
-	return nil
+	_, err = ipc.Send(1, string(payload))
+	return err
 }
 
 func getNonce() string {
