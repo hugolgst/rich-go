@@ -4,9 +4,8 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
-	"os"
-
 	"github.com/dikey0ficial/rich-go/ipc"
+	"os"
 )
 
 var logged bool
