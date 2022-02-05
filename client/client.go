@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/hugolgst/rich-go/ipc"
+	"github.com/dikey0ficial/rich-go/ipc"
 )
 
 var logged bool
@@ -65,7 +65,7 @@ func SetActivity(activity Activity) error {
 	return err
 }
 
-func getNonce() string {
+func getNonce() (string, error) {
 	buf := make([]byte, 16)
 	_, err := rand.Read(buf)
 	if err != nil {
