@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/hugolgst/rich-go/client"
+	"github.com/x6r/rp/client"
 )
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 		Buttons: []*client.Button{
 			&client.Button{
 				Label: "GitHub",
-				Url:   "https://github.com/hugolgst/rich-go",
+				Url:   "https://github.com/x6r/rp",
 			},
 		},
 	})

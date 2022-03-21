@@ -1,4 +1,4 @@
-module github.com/hugolgst/rich-go
+module github.com/x6r/rp
 
 go 1.17
 

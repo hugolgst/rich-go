@@ -1,23 +1,25 @@
-# rich-go [![Build Status](https://travis-ci.org/hugolgst/rich-go.svg?branch=master)](https://travis-ci.org/hugolgst/rich-go)
+# rich-go [![Build Status](https://travis-ci.org/x6r/rp.svg?branch=master)](https://travis-ci.org/x6r/rp)
 
 An implementation of Discord's rich presence in Golang for Linux, macOS and Windows
 
 ## Installation
 
-Install `github.com/hugolgst/rich-go`:
+Install `github.com/x6r/rp`:
 
 ```
-$ go get github.com/hugolgst/rich-go
+$ go get github.com/x6r/rp
 ```
 
 ## Usage
 
 First of all import rich-go
+
 ```golang
-import "github.com/hugolgst/rich-go/client"
+import "github.com/x6r/rp/client"
 ```
 
 then login by sending the first handshake
+
 ```golang
 err := client.Login("DISCORD_APP_ID")
 if err != nil {
@@ -26,6 +28,7 @@ if err != nil {
 ```
 
 and you can set the Rich Presence activity (parameters can be found :
+
 ```golang
 err = client.SetActivity(client.Activity{
 	State:      "Heyy!!!",
@@ -53,7 +56,7 @@ More details in the [example](https://github.com/ananagame/rich-go/blob/master/e
 
 ## Contributing
 
-1. Fork it (https://github.com/hugolgst/rich-go/fork)
+1. Fork it (https://github.com/x6r/rp/fork)
 2. Create your feature branch (git checkout -b my-new-feature)
 3. Commit your changes (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
