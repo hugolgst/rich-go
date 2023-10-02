@@ -3,68 +3,84 @@ package client
 import (
 	"crypto/rand"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 
 	"github.com/hugolgst/rich-go/ipc"
 )
 
-var logged bool
+// Client is a Discord client.
+type Client struct {
+	ipc    *ipc.IPC
+	logged bool
+}
 
-// Login sends a handshake in the socket and returns an error or nil
-func Login(clientid string) error {
-	if !logged {
-		payload, err := json.Marshal(Handshake{"1", clientid})
-		if err != nil {
-			return err
-		}
+// NewClient returns Discord Client.
+func NewClient(clientID string) (*Client, error) {
+	c := Client{}
 
-		err = ipc.OpenSocket()
-		if err != nil {
-			return err
-		}
-
-		// TODO: Response should be parsed
-		ipc.Send(0, string(payload))
+	i, err := ipc.NewIPC()
+	if err != nil {
+		return nil, err
 	}
-	logged = true
+
+	c.ipc = i
+
+	if err := c.Login(clientID); err != nil {
+		return nil, err
+	}
+
+	return &c, nil
+}
+
+// Login sends a handshake in the socket and returns an error or nil.
+func (c *Client) Login(clientid string) error {
+	if !c.logged {
+		if err := c.handler(0, Handshake{"1", clientid}); err != nil {
+			return err
+		}
+	}
+	c.logged = true
 
 	return nil
 }
 
-func Logout() {
-	logged = false
+// Logout close socket.
+func (c *Client) Logout() error {
+	c.logged = false
 
-	err := ipc.CloseSocket()
+	err := c.ipc.CloseSocket()
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
-func SetActivity(activity Activity) error {
-	if !logged {
-		return nil
+// SetActivity send request to Discord for change user status.
+func (c *Client) SetActivity(activity Activity) error {
+	if !c.logged {
+		return errors.New("rich-go: client not login")
 	}
 
-	payload, err := json.Marshal(Frame{
+	payload := Frame{
 		"SET_ACTIVITY",
 		Args{
 			os.Getpid(),
 			mapActivity(&activity),
 		},
-		getNonce(),
-	})
+		c.getNonce(),
+	}
 
-	if err != nil {
+	if err := c.handler(1, payload); err != nil {
 		return err
 	}
 
-	// TODO: Response should be parsed
-	ipc.Send(1, string(payload))
 	return nil
 }
 
-func getNonce() string {
+func (c *Client) getNonce() string {
 	buf := make([]byte, 16)
 	_, err := rand.Read(buf)
 	if err != nil {
@@ -74,4 +90,29 @@ func getNonce() string {
 	buf[6] = (buf[6] & 0x0f) | 0x40
 
 	return fmt.Sprintf("%x-%x-%x-%x-%x", buf[0:4], buf[4:6], buf[6:8], buf[8:10], buf[10:])
+}
+
+func (c *Client) handler(opcode int, payload interface{}) error {
+	jsonPayload, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	var response Error
+
+	resp, err := c.ipc.Send(opcode, string(jsonPayload))
+	if err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(resp, &response); err != nil {
+		return err
+	}
+
+	switch response.getCode() {
+	case NoErr:
+		return nil
+	}
+
+	return &response
 }
