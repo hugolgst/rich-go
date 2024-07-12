@@ -17,7 +17,11 @@ func GetIpcPath() string {
 	if _, err := os.Stat("/run/user/1000/snap.discord"); err == nil {
 		return "/run/user/1000/snap.discord"
 	}
-	
+
+	if _, err := os.Stat("/run/user/1000/.flatpak/com.discordapp.Discord/xdg-run"); err == nil {
+		return "/run/user/1000/.flatpak/com.discordapp.Discord/xdg-run"
+	}
+
 	for _, variablename := range variablesnames {
 		path, exists := os.LookupEnv(variablename)
 
