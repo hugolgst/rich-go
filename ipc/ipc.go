@@ -3,7 +3,6 @@ package ipc
 import (
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"net"
 	"os"
 )
@@ -42,39 +41,42 @@ func CloseSocket() error {
 }
 
 // Read the socket response
-func Read() string {
+func Read() (string, error) {
 	buf := make([]byte, 512)
 	payloadlength, err := socket.Read(buf)
 	if err != nil {
-		//fmt.Println("Nothing to read")
+		return "", err
 	}
 
 	buffer := new(bytes.Buffer)
 	for i := 8; i < payloadlength; i++ {
-		buffer.WriteByte(buf[i])
+		err := buffer.WriteByte(buf[i])
+		if err != nil {
+			return "", err
+		}
 	}
 
-	return buffer.String()
+	return buffer.String(), nil
 }
 
 // Send opcode and payload to the unix socket
-func Send(opcode int, payload string) string {
+func Send(opcode int, payload string) (string, error) {
 	buf := new(bytes.Buffer)
 
 	err := binary.Write(buf, binary.LittleEndian, int32(opcode))
 	if err != nil {
-		fmt.Println(err)
+		return "", err
 	}
 
 	err = binary.Write(buf, binary.LittleEndian, int32(len(payload)))
 	if err != nil {
-		fmt.Println(err)
+		return "", err
 	}
 
 	buf.Write([]byte(payload))
 	_, err = socket.Write(buf.Bytes())
 	if err != nil {
-		fmt.Println(err)
+		return "", err
 	}
 
 	return Read()
