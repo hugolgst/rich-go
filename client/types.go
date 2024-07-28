@@ -1,14 +1,36 @@
 package client
 
+import (
+	"encoding/json"
+	"strconv"
+)
+
+const (
+	handshakeOpcode uint32 = iota
+	frameOpcode
+	closeOpcode
+)
+
+type Error struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}
+
+func (e Error) Error() string {
+	return "discord code " + strconv.Itoa(e.Code) + ": " + e.Message
+}
+
 type Handshake struct {
 	V        string `json:"v"`
 	ClientId string `json:"client_id"`
 }
 
 type Frame struct {
-	Cmd   string `json:"cmd"`
-	Args  Args   `json:"args"`
-	Nonce string `json:"nonce"`
+	Cmd   string          `json:"cmd"`
+	Args  Args            `json:"args"`
+	Data  json.RawMessage `json:"data"`
+	Evt   string          `json:"evt"`
+	Nonce string          `json:"nonce"`
 }
 
 type Args struct {

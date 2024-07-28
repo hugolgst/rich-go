@@ -1,44 +1,80 @@
 package client
 
 import (
+	"context"
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"os"
 
-	"github.com/hugolgst/rich-go/ipc"
+	"github.com/EpicStep/discord-game-sdk-go/transport"
 )
 
-var logged bool
+var (
+	conn   transport.Conn
+	logged bool
+)
 
-// Login sends a handshake in the socket and returns an error or nil
-func Login(clientid string) error {
-	if !logged {
-		payload, err := json.Marshal(Handshake{"1", clientid})
-		if err != nil {
-			return err
-		}
-
-		err = ipc.OpenSocket()
-		if err != nil {
-			return err
-		}
-
-		// TODO: Response should be parsed
-		ipc.Send(0, string(payload))
+// Login sends a handshake in the socket and returns an error or nil.
+func Login(clientId string) error {
+	if logged {
+		return nil
 	}
+
+	ctx := context.Background()
+
+	payload, err := json.Marshal(Handshake{"1", clientId})
+	if err != nil {
+		return err
+	}
+
+	conn, err = transport.New(ctx, transport.Options{})
+	if err != nil {
+		return fmt.Errorf("failed to create connection: %w", err)
+	}
+
+	if err = conn.Write(ctx, handshakeOpcode, payload); err != nil {
+		return fmt.Errorf("failed to send handshake: %w", err)
+	}
+
+	opcode, data, err := conn.Read(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to read data from conn: %w", err)
+	}
+
+	// when we received non frame - is an error.
+	if opcode != frameOpcode {
+		if opcode == closeOpcode {
+			var closeError Error
+
+			if err = json.Unmarshal(data, &closeError); err != nil {
+				return err
+			}
+
+			return closeError
+		}
+
+		return fmt.Errorf("unexpected opcode %d", opcode)
+	}
+
 	logged = true
 
 	return nil
 }
 
-func Logout() {
+func Logout() error {
+	if !logged {
+		return nil
+	}
+
 	logged = false
 
-	err := ipc.CloseSocket()
+	err := conn.Close()
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("failed to close connection: %w", err)
 	}
+
+	return nil
 }
 
 func SetActivity(activity Activity) error {
@@ -46,21 +82,50 @@ func SetActivity(activity Activity) error {
 		return nil
 	}
 
+	ctx := context.Background()
+
 	payload, err := json.Marshal(Frame{
-		"SET_ACTIVITY",
-		Args{
+		Cmd: "SET_ACTIVITY",
+		Args: Args{
 			os.Getpid(),
 			mapActivity(&activity),
 		},
-		getNonce(),
+		Nonce: getNonce(),
 	})
 
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to marshal activity: %w", err)
 	}
 
-	// TODO: Response should be parsed
-	ipc.Send(1, string(payload))
+	if err = conn.Write(ctx, frameOpcode, payload); err != nil {
+		return fmt.Errorf("failed to write activity: %w", err)
+	}
+
+	opcode, rawResp, err := conn.Read(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to read data from conn: %w", err)
+	}
+
+	if opcode != frameOpcode {
+		return fmt.Errorf("unexpected opcode %d", opcode)
+	}
+
+	var resp Frame
+
+	if err = json.Unmarshal(rawResp, &resp); err != nil {
+		return fmt.Errorf("failed to unmarshal response: %w", err)
+	}
+
+	if resp.Evt == "ERROR" {
+		var e Error
+
+		if err = json.Unmarshal(resp.Data, &e); err != nil {
+			return err
+		}
+
+		return e
+	}
+
 	return nil
 }
 

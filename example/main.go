@@ -13,6 +13,12 @@ func main() {
 		panic(err)
 	}
 
+	defer func() {
+		if err = client.Logout(); err != nil {
+			panic(err)
+		}
+	}()
+
 	now := time.Now()
 	err = client.SetActivity(client.Activity{
 		State:      "Heyy!!!",
@@ -30,7 +36,7 @@ func main() {
 			Start: &now,
 		},
 		Buttons: []*client.Button{
-			&client.Button{
+			{
 				Label: "GitHub",
 				Url:   "https://github.com/hugolgst/rich-go",
 			},
