@@ -11,6 +11,7 @@ const (
 	closeOpcode
 )
 
+// Error is a Discord error.
 type Error struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
@@ -20,58 +21,58 @@ func (e Error) Error() string {
 	return "discord code " + strconv.Itoa(e.Code) + ": " + e.Message
 }
 
-type Handshake struct {
+type handshake struct {
 	V        string `json:"v"`
-	ClientId string `json:"client_id"`
+	ClientID string `json:"client_id"`
 }
 
-type Frame struct {
+type frame struct {
 	Cmd   string          `json:"cmd"`
-	Args  Args            `json:"args"`
+	Args  args            `json:"args"`
 	Data  json.RawMessage `json:"data"`
 	Evt   string          `json:"evt"`
 	Nonce string          `json:"nonce"`
 }
 
-type Args struct {
+type args struct {
 	Pid      int              `json:"pid"`
-	Activity *PayloadActivity `json:"activity"`
+	Activity *payloadActivity `json:"activity"`
 }
 
-type PayloadActivity struct {
+type payloadActivity struct {
 	Details    string             `json:"details,omitempty"`
 	State      string             `json:"state,omitempty"`
-	Assets     PayloadAssets      `json:"assets,omitempty"`
-	Party      *PayloadParty      `json:"party,omitempty"`
-	Timestamps *PayloadTimestamps `json:"timestamps,omitempty"`
-	Secrets    *PayloadSecrets    `json:"secrets,omitempty"`
-	Buttons    []*PayloadButton   `json:"buttons,omitempty"`
+	Assets     payloadAssets      `json:"assets,omitempty"`
+	Party      *payloadParty      `json:"party,omitempty"`
+	Timestamps *payloadTimestamps `json:"timestamps,omitempty"`
+	Secrets    *payloadSecrets    `json:"secrets,omitempty"`
+	Buttons    []*payloadButton   `json:"buttons,omitempty"`
 }
 
-type PayloadAssets struct {
+type payloadAssets struct {
 	LargeImage string `json:"large_image,omitempty"`
 	LargeText  string `json:"large_text,omitempty"`
 	SmallImage string `json:"small_image,omitempty"`
 	SmallText  string `json:"small_text,omitempty"`
 }
 
-type PayloadParty struct {
+type payloadParty struct {
 	ID   string `json:"id,omitempty"`
 	Size [2]int `json:"size,omitempty"`
 }
 
-type PayloadTimestamps struct {
+type payloadTimestamps struct {
 	Start *uint64 `json:"start,omitempty"`
 	End   *uint64 `json:"end,omitempty"`
 }
 
-type PayloadSecrets struct {
+type payloadSecrets struct {
 	Match    string `json:"match,omitempty"`
 	Join     string `json:"join,omitempty"`
 	Spectate string `json:"spectate,omitempty"`
 }
 
-type PayloadButton struct {
+type payloadButton struct {
 	Label string `json:"label,omitempty"`
-	Url   string `json:"url,omitempty"`
+	URL   string `json:"url,omitempty"`
 }

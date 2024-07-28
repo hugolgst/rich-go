@@ -33,7 +33,7 @@ type Button struct {
 	// The label of the button
 	Label string
 	// The URL of the button
-	Url string
+	URL string
 }
 
 // Party holds information for the current party of the player
@@ -64,11 +64,11 @@ type Secrets struct {
 	Spectate string
 }
 
-func mapActivity(activity *Activity) *PayloadActivity {
-	final := &PayloadActivity{
+func mapActivity(activity *Activity) *payloadActivity {
+	final := &payloadActivity{
 		Details: activity.Details,
 		State:   activity.State,
-		Assets: PayloadAssets{
+		Assets: payloadAssets{
 			LargeImage: activity.LargeImage,
 			LargeText:  activity.LargeText,
 			SmallImage: activity.SmallImage,
@@ -78,7 +78,7 @@ func mapActivity(activity *Activity) *PayloadActivity {
 
 	if activity.Timestamps != nil && activity.Timestamps.Start != nil {
 		start := uint64(activity.Timestamps.Start.UnixNano() / 1e6)
-		final.Timestamps = &PayloadTimestamps{
+		final.Timestamps = &payloadTimestamps{
 			Start: &start,
 		}
 		if activity.Timestamps.End != nil {
@@ -88,14 +88,14 @@ func mapActivity(activity *Activity) *PayloadActivity {
 	}
 
 	if activity.Party != nil {
-		final.Party = &PayloadParty{
+		final.Party = &payloadParty{
 			ID:   activity.Party.ID,
 			Size: [2]int{activity.Party.Players, activity.Party.MaxPlayers},
 		}
 	}
 
 	if activity.Secrets != nil {
-		final.Secrets = &PayloadSecrets{
+		final.Secrets = &payloadSecrets{
 			Join:     activity.Secrets.Join,
 			Match:    activity.Secrets.Match,
 			Spectate: activity.Secrets.Spectate,
@@ -104,9 +104,9 @@ func mapActivity(activity *Activity) *PayloadActivity {
 
 	if len(activity.Buttons) > 0 {
 		for _, btn := range activity.Buttons {
-			final.Buttons = append(final.Buttons, &PayloadButton{
+			final.Buttons = append(final.Buttons, &payloadButton{
 				Label: btn.Label,
-				Url:   btn.Url,
+				URL:   btn.URL,
 			})
 		}
 	}

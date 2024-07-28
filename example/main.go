@@ -1,3 +1,4 @@
+// Package main is a example of rich-go usage.
 package main
 
 import (
@@ -38,7 +39,7 @@ func main() {
 		Buttons: []*client.Button{
 			{
 				Label: "GitHub",
-				Url:   "https://github.com/hugolgst/rich-go",
+				URL:   "https://github.com/hugolgst/rich-go",
 			},
 		},
 	})

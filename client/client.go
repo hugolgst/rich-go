@@ -1,3 +1,4 @@
+// Package client implements client to Discord.
 package client
 
 import (
@@ -16,14 +17,14 @@ var (
 )
 
 // Login sends a handshake in the socket and returns an error or nil.
-func Login(clientId string) error {
+func Login(clientID string) error {
 	if logged {
 		return nil
 	}
 
 	ctx := context.Background()
 
-	payload, err := json.Marshal(Handshake{"1", clientId})
+	payload, err := json.Marshal(handshake{"1", clientID})
 	if err != nil {
 		return err
 	}
@@ -62,6 +63,7 @@ func Login(clientId string) error {
 	return nil
 }
 
+// Logout ...
 func Logout() error {
 	if !logged {
 		return nil
@@ -77,6 +79,7 @@ func Logout() error {
 	return nil
 }
 
+// SetActivity to Discord rich-presence.
 func SetActivity(activity Activity) error {
 	if !logged {
 		return nil
@@ -84,9 +87,9 @@ func SetActivity(activity Activity) error {
 
 	ctx := context.Background()
 
-	payload, err := json.Marshal(Frame{
+	payload, err := json.Marshal(frame{
 		Cmd: "SET_ACTIVITY",
-		Args: Args{
+		Args: args{
 			os.Getpid(),
 			mapActivity(&activity),
 		},
@@ -110,7 +113,7 @@ func SetActivity(activity Activity) error {
 		return fmt.Errorf("unexpected opcode %d", opcode)
 	}
 
-	var resp Frame
+	var resp frame
 
 	if err = json.Unmarshal(rawResp, &resp); err != nil {
 		return fmt.Errorf("failed to unmarshal response: %w", err)
