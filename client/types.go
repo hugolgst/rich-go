@@ -2,7 +2,6 @@ package client
 
 import (
 	"encoding/json"
-	"strconv"
 )
 
 const (
@@ -10,16 +9,6 @@ const (
 	frameOpcode
 	closeOpcode
 )
-
-// Error is a Discord error.
-type Error struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-}
-
-func (e Error) Error() string {
-	return "discord code " + strconv.Itoa(e.Code) + ": " + e.Message
-}
 
 type handshake struct {
 	V        string `json:"v"`
