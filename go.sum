@@ -1,2 +1,6 @@
-gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce h1:+JknDZhAj8YMt7GC73Ei8pv4MzjDUNPHgQWJdtMAaDU=
-gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce/go.mod h1:5AcXVHNjg+BDxry382+8OKon8SEWiKktQR07RKPsv1c=
+github.com/EpicStep/discord-game-sdk-go v0.0.0-20240728102048-b23d6f7ef5f2 h1:VHAp9Tk++DwtDFOVJbyYg1RRSpi9l2lPcCq8PTeqlRI=
+github.com/EpicStep/discord-game-sdk-go v0.0.0-20240728102048-b23d6f7ef5f2/go.mod h1:yKtU18uPb7ETZHy3RcBCVjyWfxNulWArsvZJCp60/HU=
+github.com/Microsoft/go-winio v0.6.2 h1:F2VQgta7ecxGYO8k3ZZz3RS8fVIXVxONVUPlNERoyfY=
+github.com/Microsoft/go-winio v0.6.2/go.mod h1:yd8OoFMLzJbo9gZq8j5qaps8bJ9aShtEA8Ipt1oGCvU=
+golang.org/x/sys v0.10.0 h1:SqMFp9UcQJZa+pmYuAKjd9xq1f0j5rLcDIk0mj4qAsA=
+golang.org/x/sys v0.10.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

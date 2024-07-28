@@ -1,4 +1,7 @@
-# rich-go [![Build Status](https://travis-ci.org/hugolgst/rich-go.svg?branch=master)](https://travis-ci.org/hugolgst/rich-go)
+# rich-go
+[![Go Reference](https://pkg.go.dev/badge/github.com/hugolgst/rich-go.svg)](https://pkg.go.dev/github.com/hugolgst/rich-go) 
+![Lint](https://github.com/hugolgst/rich-go/actions/workflows/lint.yml/badge.svg)
+![Test](https://github.com/hugolgst/rich-go/actions/workflows/test.yml/badge.svg)
 
 An implementation of Discord's rich presence in Golang for Linux, macOS and Windows
 
@@ -64,3 +67,5 @@ More details in the [example](https://github.com/ananagame/rich-go/blob/master/e
 - [hugolgst](https://github.com/hugolgst) - creator, maintainer
 - [donovansolms](https://github.com/donovansolms) - contributor
 - [heroslender](https://github.com/heroslender) - contributor
+- [EpicStep](https://github.com/epicstep) - contributor
+
