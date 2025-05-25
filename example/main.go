@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/hugolgst/rich-go/client"
@@ -42,7 +41,5 @@ func main() {
 	}
 
 	// Discord will only show the presence if the app is running
-	// Sleep for a few seconds to see the update
-	fmt.Println("Sleeping...")
-	time.Sleep(time.Second * 10)
+	select {}
 }
