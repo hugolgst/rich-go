@@ -30,7 +30,7 @@ func main() {
 			Start: &now,
 		},
 		Buttons: []*client.Button{
-			&client.Button{
+			{
 				Label: "GitHub",
 				Url:   "https://github.com/hugolgst/rich-go",
 			},
