@@ -24,8 +24,9 @@ func Login(clientid string) error {
 			return err
 		}
 
-		// TODO: Response should be parsed
-		ipc.Send(0, string(payload))
+		if err := sendWithError(0, string(payload)); err != nil {
+			return err
+		}
 	}
 	logged = true
 
@@ -59,8 +60,9 @@ func SetActivity(activity Activity) error {
 		return err
 	}
 
-	// TODO: Response should be parsed
-	ipc.Send(1, string(payload))
+	if err := sendWithError(1, string(payload)); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -74,4 +76,23 @@ func getNonce() string {
 	buf[6] = (buf[6] & 0x0f) | 0x40
 
 	return fmt.Sprintf("%x-%x-%x-%x-%x", buf[0:4], buf[4:6], buf[6:8], buf[8:10], buf[10:])
+}
+
+func sendWithError(opcode int, payload string) error {
+	resp := ipc.Send(opcode, payload)
+
+	var data struct {
+		Code    int    `json:"code"`
+		Message string `json:"message"`
+	}
+
+	if err := json.Unmarshal([]byte(resp), &data); err != nil {
+		return err
+	}
+
+	if data.Code == 0 {
+		return nil
+	}
+
+	return fmt.Errorf("error code %d: %s", data.Code, data.Message)
 }
